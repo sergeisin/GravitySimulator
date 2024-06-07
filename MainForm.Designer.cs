@@ -50,7 +50,9 @@
             this.skglSurface.TabIndex = 0;
             this.skglSurface.VSync = false;
             this.skglSurface.PaintSurface += new System.EventHandler<SkiaSharp.Views.Desktop.SKPaintGLSurfaceEventArgs>(this.SkglSurface_PaintSurface);
+            this.skglSurface.Click += new System.EventHandler(this.SkglSurface_Click);
             this.skglSurface.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SkglSurface_KeyDown);
+            this.skglSurface.MouseMove += new System.Windows.Forms.MouseEventHandler(this.skglSurface_MouseMove);
             // 
             // MainForm
             // 

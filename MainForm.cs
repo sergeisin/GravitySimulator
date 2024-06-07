@@ -38,11 +38,15 @@ namespace GravitySimulator
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
             SKCanvas g = e.Surface.Canvas;
-            
+
+            g.Clear(SKColor.Parse("#000000"));
             g.Translate(0.5f * skglSurface.Width, 0.5f * skglSurface.Height);
             g.Scale(scaleFactor);
 
             Renderer.Render(g);
+
+            if (!pos.IsEmpty)
+                Renderer.DrawCircle(g, pos.X, pos.Y);
         }
 
         private void SkglSurface_KeyDown(object sender, KeyEventArgs e)
@@ -61,6 +65,28 @@ namespace GravitySimulator
             {
                 scaleFactor = 1.0f;
             }
+        }
+
+        private void SkglSurface_Click(object sender, EventArgs e)
+        {
+            var args = (MouseEventArgs)e;
+
+            pos = new SKPoint()
+            {
+                X = args.X / scaleFactor - 0.5f * skglSurface.Width,
+                Y = args.Y / scaleFactor - 0.5f * skglSurface.Height,
+            };
+        }
+
+        private SKPoint pos;
+
+        private void skglSurface_MouseMove(object sender, MouseEventArgs e)
+        {
+            pos = new SKPoint()
+            {
+                X = e.X / scaleFactor - 0.5f * skglSurface.Width,
+                Y = e.Y / scaleFactor - 0.5f * skglSurface.Height,
+            };
         }
     }
 }

@@ -11,16 +11,24 @@ namespace GravitySimulator
     {
         public static void Render(SKCanvas g)
         {
-            g.Clear(SKColor.Parse("#000000"));
-
             var paint = new SKPaint
             {
                 Color = SKColor.Parse("#FF0066CC"),
-                StrokeWidth = 5,
                 IsAntialias = true
             };
 
             g.DrawCircle(0, 0, 50, paint);
+        }
+
+        public static void DrawCircle(SKCanvas g, float x, float y)
+        {
+            var paint = new SKPaint
+            {
+                Color = SKColor.Parse("#FF0066CC"),
+                IsAntialias = true
+            };
+
+            g.DrawCircle(x, y, 20, paint);
         }
 
         private static void DrawLine(SKCanvas g)

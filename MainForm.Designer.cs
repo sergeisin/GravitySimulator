@@ -28,13 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.frameTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
+            // 
+            // frameTimer
+            // 
+            this.frameTimer.Enabled = true;
+            this.frameTimer.Interval = 1;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(982, 553);
             this.Name = "MainForm";
             this.Text = "GravitySimulator";
             this.ResumeLayout(false);
@@ -42,6 +49,8 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer frameTimer;
     }
 }
 

@@ -36,6 +36,7 @@
             // 
             this.frameTimer.Enabled = true;
             this.frameTimer.Interval = 1;
+            this.frameTimer.Tick += new System.EventHandler(this.FrameTimer_Tick);
             // 
             // MainForm
             // 
@@ -43,6 +44,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 553);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "GravitySimulator";
             this.ResumeLayout(false);
 

@@ -2,7 +2,7 @@
 
 namespace GravitySimulator
 {
-    // Vector, Complex, 2D-Position, PointD
+    // Vector, Complex, Position, PointD
     // It seems they are the same thing
     public class Vector2d
     {

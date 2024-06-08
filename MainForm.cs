@@ -69,24 +69,14 @@ namespace GravitySimulator
 
         private void SkglSurface_Click(object sender, EventArgs e)
         {
-            var args = (MouseEventArgs)e;
+            var a = (MouseEventArgs)e;
 
             pos = new SKPoint()
             {
-                X = args.X / scaleFactor - 0.5f * skglSurface.Width,
-                Y = args.Y / scaleFactor - 0.5f * skglSurface.Height,
+                X = (a.X - 0.5f * skglSurface.Width)  / scaleFactor,
+                Y = (a.Y - 0.5f * skglSurface.Height) / scaleFactor
             };
         }
-
         private SKPoint pos;
-
-        private void skglSurface_MouseMove(object sender, MouseEventArgs e)
-        {
-            pos = new SKPoint()
-            {
-                X = e.X / scaleFactor - 0.5f * skglSurface.Width,
-                Y = e.Y / scaleFactor - 0.5f * skglSurface.Height,
-            };
-        }
     }
 }

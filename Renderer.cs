@@ -22,10 +22,18 @@ namespace GravitySimulator
 
         public static void DrawCircle(SKCanvas g, float x, float y)
         {
+            SKColor color_1 = SKColor.Parse("#FF0066CC");
+            SKColor color_2 = SKColor.Parse("#FF11FF00");
+
+            SKColor[] colors = { color_1, color_2 };
+
+            SKPoint p1 = new SKPoint(-0.5f * g.LocalClipBounds.Width, -0.5f * g.LocalClipBounds.Height);
+            SKPoint p2 = new SKPoint(+0.5f * g.LocalClipBounds.Width, +0.5f * g.LocalClipBounds.Height);
+
             var paint = new SKPaint
             {
-                Color = SKColor.Parse("#FF0066CC"),
-                IsAntialias = true
+                IsAntialias = true,
+                Shader = SKShader.CreateLinearGradient(p1, p2, colors, SKShaderTileMode.Clamp)
             };
 
             g.DrawCircle(x, y, 20, paint);

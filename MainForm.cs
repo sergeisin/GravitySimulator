@@ -9,8 +9,10 @@ namespace GravitySimulator
 {
     public partial class MainForm : Form
     {
-        private readonly CounterFPS counterFPS;
+        private CounterFPS counterFPS;
         private float scaleFactor;
+        private SKPoint clickPosition;
+        private Model physicsModel;
 
         public MainForm()
         {
@@ -19,6 +21,15 @@ namespace GravitySimulator
             MouseWheel += new MouseEventHandler(MainForm_MouseWheel);
             counterFPS = new CounterFPS(this);
             scaleFactor = 1.0f;
+
+            PhyObject[] objects =
+            {
+                new PhyObject(1, new Vector2d(10, 20), new Vector2d()),
+                new PhyObject(1, new Vector2d(30, 40), new Vector2d()),
+                new PhyObject(1, new Vector2d(50, 10), new Vector2d()),
+            };
+
+            physicsModel = new Model(objects, deltaT: 0.1);
         }
 
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)
@@ -31,8 +42,9 @@ namespace GravitySimulator
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
-            skglSurface.Invalidate();
-            counterFPS.UpdateFPS();
+            physicsModel.Advance();     // Model
+            skglSurface.Invalidate();   // Render
+            counterFPS.UpdateFPS();     // FPS
         }
 
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
@@ -45,8 +57,9 @@ namespace GravitySimulator
 
             Renderer.Render(g);
 
-            if (!pos.IsEmpty)
-                Renderer.DrawCircle(g, pos.X, pos.Y);
+            // Mouse capture test
+            if (!clickPosition.IsEmpty)
+                Renderer.DrawCircle(g, clickPosition.X, clickPosition.Y);
         }
 
         private void SkglSurface_KeyDown(object sender, KeyEventArgs e)
@@ -71,12 +84,11 @@ namespace GravitySimulator
         {
             var a = (MouseEventArgs)e;
 
-            pos = new SKPoint()
+            clickPosition = new SKPoint()
             {
                 X = (a.X - 0.5f * skglSurface.Width)  / scaleFactor,
                 Y = (a.Y - 0.5f * skglSurface.Height) / scaleFactor
             };
         }
-        private SKPoint pos;
     }
 }

@@ -25,9 +25,10 @@ namespace GravitySimulator
             }
             else
             {
+                Random rand = new Random();
                 var lst = new List<CircleTrack>(objects.Length);
                 foreach (var obj in objects)
-                    lst.Add(new CircleTrack(obj.Position.Mag));
+                    lst.Add(new CircleTrack(obj.Position.Mag, obj.Position.AngRad));
 
                 circles = lst.ToArray();
             }
@@ -41,6 +42,10 @@ namespace GravitySimulator
             }
         }
 
+        public Vector2d[] GetPositions()
+        {
+            throw new NotImplementedException();
+        }
 
         public double DT { get; set; }
 

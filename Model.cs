@@ -9,7 +9,8 @@ namespace GravitySimulator
         {
             if (objects != null)
             {
-                Objects = objects;
+                this.objects = objects;
+                Count = objects.Length;
             }
 
             if (objects.Length > MaxObjects)
@@ -25,32 +26,42 @@ namespace GravitySimulator
             }
             else
             {
-                Random rand = new Random();
                 var lst = new List<CircleTrack>(objects.Length);
                 foreach (var obj in objects)
                     lst.Add(new CircleTrack(obj.Position.Mag, obj.Position.AngRad));
 
                 circles = lst.ToArray();
             }
+
+            RenderObjects = new Vector2d[Count];
+            for (int i = 0; i < Count; i++)
+            {
+                RenderObjects[i] = new Vector2d();
+            }
         }
 
         public void Advance()
         {
-            for (int i = 0; i < Objects.Length; i++)
+            for (int i = 0; i < objects.Length; i++)
             {
-                Objects[i].Position = circles[i].NextPosition(DT);
+                objects[i].Position = circles[i].NextPosition(DT);
+
+                // Invert Y
+                RenderObjects[i].X =  objects[i].Position.X;
+                RenderObjects[i].Y = -objects[i].Position.Y;
             }
         }
 
-        public Vector2d[] GetPositions()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// In scene 
+        /// </summary>
+        public Vector2d[] RenderObjects { get; private set; }
 
         public double DT { get; set; }
 
-        public PhyObject[] Objects { get; private set; }
+        public int Count { get; private set; }
 
+        private PhyObject[] objects;
         private CircleTrack[] circles;
         private const int MaxObjects = 8;
     }

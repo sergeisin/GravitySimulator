@@ -9,7 +9,7 @@ namespace GravitySimulator
 {
     public static class Renderer
     {
-        public static void Render(SKCanvas g)
+        public static void Render(SKCanvas g, Vector2d[] rObjects)
         {
             var paint = new SKPaint
             {
@@ -17,7 +17,15 @@ namespace GravitySimulator
                 IsAntialias = true
             };
 
-            g.DrawCircle(0, 0, 50, paint);
+            g.DrawCircle(0, 0, 2, paint);
+
+            g.DrawLine(-100,  0, 100, 0, paint);
+            g.DrawLine( 0, -100, 0, 100, paint);
+
+            foreach (var o in rObjects)
+            {
+                g.DrawCircle(new SKPoint((float)o.X, (float)o.Y), 5, paint);
+            }
         }
 
         public static void DrawCircle(SKCanvas g, float x, float y)

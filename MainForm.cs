@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
@@ -9,18 +7,13 @@ namespace GravitySimulator
 {
     public partial class MainForm : Form
     {
-        private CounterFPS counterFPS;
-        private float scaleFactor;
-        private SKPoint clickPosition;
-        private Model physicsModel;
-
         public MainForm()
         {
             InitializeComponent();
 
             MouseWheel += new MouseEventHandler(MainForm_MouseWheel);
+
             counterFPS = new CounterFPS(this);
-            scaleFactor = 1.0f;
 
             PhyObject[] objects =
             {
@@ -42,9 +35,9 @@ namespace GravitySimulator
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
-            physicsModel.Advance();     // Model
-            skglSurface.Invalidate();   // Render
-            counterFPS.UpdateFPS();     // FPS
+            physicsModel.Advance();
+            skglSurface.Invalidate();
+            //counterFPS.UpdateFPS();
         }
 
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
@@ -55,11 +48,14 @@ namespace GravitySimulator
             g.Translate(0.5f * skglSurface.Width, 0.5f * skglSurface.Height);
             g.Scale(scaleFactor);
 
-            Renderer.Render(g);
+            Renderer.Render(g, physicsModel.RenderObjects);
 
             // Mouse capture test
             if (!clickPosition.IsEmpty)
+            {
                 Renderer.DrawCircle(g, clickPosition.X, clickPosition.Y);
+                Text = clickPosition.ToString();
+            }
         }
 
         private void SkglSurface_KeyDown(object sender, KeyEventArgs e)
@@ -90,5 +86,14 @@ namespace GravitySimulator
                 Y = (a.Y - 0.5f * skglSurface.Height) / scaleFactor
             };
         }
+
+        private Model physicsModel;
+
+        private CounterFPS counterFPS;
+        
+        // Last mouse click position (model)
+        private SKPoint clickPosition;
+        
+        private float scaleFactor = 1f;
     }
 }

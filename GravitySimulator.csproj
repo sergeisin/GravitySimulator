@@ -89,23 +89,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CircleTrack.cs" />
-    <Compile Include="CounterFPS.cs" />
-    <Compile Include="Geometry.cs" />
-    <Compile Include="Physics.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Source\CircleTrack.cs" />
+    <Compile Include="Source\CounterFPS.cs" />
+    <Compile Include="Source\Geometry.cs" />
+    <Compile Include="Source\Physics.cs" />
+    <Compile Include="Source\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Source\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model.cs" />
-    <Compile Include="PhyObject.cs" />
-    <Compile Include="Renderer.cs" />
-    <Compile Include="Vector2d.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Source\Model.cs" />
+    <Compile Include="Source\PhyObject.cs" />
+    <Compile Include="Source\Renderer.cs" />
+    <Compile Include="Source\Vector2d.cs" />
+    <Compile Include="Source\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Source\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -132,6 +132,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

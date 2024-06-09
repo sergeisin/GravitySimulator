@@ -22,7 +22,7 @@ namespace GravitySimulator
                 new PhyObject(1, new Vector2d(50, 10), new Vector2d()),
             };
 
-            physicsModel = new Model(objects, deltaT: 0.1);
+            physicsModel = new Model(objects, deltaT: 0.05);
         }
 
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)

@@ -2,6 +2,6 @@
 
 ## The project is not ready yet
 
-
-## Requirements
-NuGet SkiaSharp.Views.WindowsForms 2.88.8
+## Dependencies
+OpenTK 3.1.0
+SkiaSharp.Views.WindowsForms 2.88.8

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
+using OpenTK;
 
 namespace GravitySimulator
 {
@@ -37,7 +38,7 @@ namespace GravitySimulator
         {
             physicsModel.Advance();
             skglSurface.Invalidate();
-            //counterFPS.UpdateFPS();
+            counterFPS.UpdateFPS();
         }
 
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)

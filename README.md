@@ -4,4 +4,4 @@
 
 
 ## Requirements
-NuGet SkiaSharp.Views.WindowsForms
+NuGet SkiaSharp.Views.WindowsForms 2.88.8

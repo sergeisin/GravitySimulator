@@ -1,23 +1,21 @@
 ﻿using System;
+using OpenTK;
 
 namespace GravitySimulator
 {
     public static class Geometry
     {
-        public static double Distance(Vector2d a, Vector2d b)
+        public static Vector2d FromPolar(double mag, double ang)
         {
-            double dX = b.X - a.X;
-            double dY = b.Y - a.Y;
+            double x = mag * Math.Cos(ang);
+            double y = mag * Math.Sin(ang);
 
-            return Math.Sqrt(dX * dX + dY * dY);
+            return new Vector2d(x, y);
         }
 
-        public static double SquareOfDistance(Vector2d a, Vector2d b)
+        public static double Angle(Vector2d a)
         {
-            double dX = b.X - a.X;
-            double dY = b.Y - a.Y;
-
-            return dX * dX + dY * dY;
+            return Math.Atan2(a.Y, a.X);
         }
 
         public static double Angle(Vector2d a, Vector2d b)
@@ -26,11 +24,6 @@ namespace GravitySimulator
             double dY = b.Y - a.Y;
 
             return Math.Atan2(dY, dX);
-        }
-
-        public static double AngDeg(Vector2d a, Vector2d b)
-        {
-            return Angle(a, b) * RadToDeg;
         }
 
         public const double RadToDeg = 180.0 / Math.PI;

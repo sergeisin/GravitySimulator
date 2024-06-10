@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTK;
 
 namespace GravitySimulator
 {
@@ -28,7 +29,7 @@ namespace GravitySimulator
             {
                 var lst = new List<CircleTrack>(objects.Length);
                 foreach (var obj in objects)
-                    lst.Add(new CircleTrack(obj.Position.Mag, obj.Position.AngRad));
+                    lst.Add(new CircleTrack(obj.Position.Length, Geometry.Angle(obj.Position)));
 
                 circles = lst.ToArray();
             }
@@ -52,9 +53,6 @@ namespace GravitySimulator
             }
         }
 
-        /// <summary>
-        /// In scene 
-        /// </summary>
         public Vector2d[] RenderObjects { get; private set; }
 
         public double DT { get; set; }

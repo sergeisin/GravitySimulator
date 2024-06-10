@@ -1,4 +1,6 @@
-﻿namespace GravitySimulator
+﻿using OpenTK;
+
+namespace GravitySimulator
 {
     public class Physics
     {
@@ -17,8 +19,8 @@
                 {
                     Vector2d force = GetForce(objects[i], objects[j]);
 
-                    forces[i].Add(force);
-                    forces[j].Sub(force);
+                    forces[i] += force; // .Add(force)
+                    forces[j] -= force; // .Sub(force)
                 }
             }
 
@@ -27,11 +29,11 @@
 
         public static Vector2d GetForce(PhyObject a, PhyObject b)
         {
-            double distance = Geometry.SquareOfDistance(a.Position, b.Position);
+            double distance = Vector2d.DistanceSquared(a.Position, b.Position);
             double forceMag = G * a.Mass * b.Mass / distance;
             double forceAng = Geometry.Angle(a.Position, b.Position);
 
-            return Vector2d.FromPolar(forceMag, forceAng);
+            return Geometry.FromPolar(forceMag, forceAng);
         }
     }
 }

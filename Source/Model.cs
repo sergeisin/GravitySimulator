@@ -34,10 +34,10 @@ namespace GravitySimulator
                 circles = lst.ToArray();
             }
 
-            RenderObjects = new Vector2d[Count];
+            ObjectsPos = new Vector2d[Count];
             for (int i = 0; i < Count; i++)
             {
-                RenderObjects[i] = new Vector2d();
+                ObjectsPos[i] = new Vector2d();
             }
         }
 
@@ -48,12 +48,12 @@ namespace GravitySimulator
                 objects[i].Position = circles[i].NextPosition(DT);
 
                 // Invert Y
-                RenderObjects[i].X =  objects[i].Position.X;
-                RenderObjects[i].Y = -objects[i].Position.Y;
+                ObjectsPos[i].X =  objects[i].Position.X;
+                ObjectsPos[i].Y = -objects[i].Position.Y;
             }
         }
 
-        public Vector2d[] RenderObjects { get; private set; }
+        public Vector2d[] ObjectsPos { get; private set; }
 
         public double DT { get; set; }
 

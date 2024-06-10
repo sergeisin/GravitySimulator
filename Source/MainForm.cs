@@ -23,57 +23,45 @@ namespace GravitySimulator
                 new PhyObject(1, new Vector2d(50, 10), new Vector2d()),
             };
 
-            physicsModel = new Model(objects, deltaT: 0.05);
+            model = new Model(objects, deltaT: 0.01);
+            scene = new Scene(objects.Length);
         }
 
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0)
-                scaleFactor *= 1.15f;
+                scene.Scale *= 1.15f;
             else
-                scaleFactor /= 1.15f;
+                scene.Scale /= 1.15f;
         }
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
-            physicsModel.Advance();
+            model.Advance();
             skglSurface.Invalidate();
             counterFPS.UpdateFPS();
         }
 
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
-            SKCanvas g = e.Surface.Canvas;
-
-            g.Clear(SKColor.Parse("#000000"));
-            g.Translate(0.5f * skglSurface.Width, 0.5f * skglSurface.Height);
-            g.Scale(scaleFactor);
-
-            Renderer.Render(g, physicsModel.RenderObjects);
-
-            // Mouse capture test
-            if (!clickPosition.IsEmpty)
-            {
-                Renderer.DrawCircle(g, clickPosition.X, clickPosition.Y);
-                Text = clickPosition.ToString();
-            }
+            scene.Render(e.Surface.Canvas, model.ObjectsPos);
         }
 
         private void SkglSurface_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Add || e.KeyCode == Keys.Oemplus)
             {
-                scaleFactor *= 1.15f;
+                scene.Scale *= 1.15f;
             }
 
             if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.OemMinus)
             {
-                scaleFactor /= 1.15f;
+                scene.Scale /= 1.15f;
             }
 
             if (e.KeyCode == Keys.Enter)
             {
-                scaleFactor = 1.0f;
+                scene.Scale = 1f;
             }
         }
 
@@ -83,18 +71,16 @@ namespace GravitySimulator
 
             clickPosition = new SKPoint()
             {
-                X = (a.X - 0.5f * skglSurface.Width)  / scaleFactor,
-                Y = (a.Y - 0.5f * skglSurface.Height) / scaleFactor
+                X = (a.X - 0.5f * skglSurface.Width)  / scene.Scale,
+                Y = (a.Y - 0.5f * skglSurface.Height) / scene.Scale
             };
         }
 
-        private Model physicsModel;
-
         private CounterFPS counterFPS;
-        
-        // Last mouse click position (model)
-        private SKPoint clickPosition;
-        
-        private float scaleFactor = 1f;
+
+        private Model model;            // Physics model
+        private Scene scene;            // Graphic scene
+
+        private SKPoint clickPosition;  // Last mouse click position (model)
     }
 }

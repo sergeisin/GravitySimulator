@@ -6,20 +6,35 @@ using OpenTK;
 namespace GravitySimulator
 {
     /* TO-DO
-     * 
-     * - добавить массив цветов 8 шт (по максимальному объектов)
      * - добавить инициализацию массива полутонов для кждого цвета
-     * 
-     * 
      */
+
     public class Scene
     {
         private SKCanvas g;
-        
+        private static SKColor[] colors;
+
+        static Scene()
+        {
+            // "#FF0066CC" - HotTrack
+
+            colors = new SKColor[8]
+            {
+                SKColors.DeepSkyBlue,
+                SKColors.MediumPurple,
+                SKColors.NavajoWhite,
+                SKColors.Orange,
+                SKColors.MediumSpringGreen,
+                SKColors.PowderBlue,
+                SKColors.BlueViolet,
+                SKColors.Lavender
+            };
+        }
+
         public Scene(int numObjects)
         {
             ObjectsNum = numObjects;
-            Background = new SKColor(0, 0, 0);
+            Background = new SKColor(0, 0, 0, 0);
         }
 
         public float Scale { get; set; } = 1f;
@@ -54,15 +69,23 @@ namespace GravitySimulator
 
         private void DrawBody(int index)
         {
-            var paint = new SKPaint
+            Vector2d p_v2d = testPos[index];
+
+            SKPoint point = new SKPoint()
             {
-                Color = SKColor.Parse("#FF0066CC"),
-                IsAntialias = true
+                X = (float)p_v2d.X,
+                Y = (float)p_v2d.Y,
             };
 
-            Vector2d pos = testPos[index];
+            var paint = new SKPaint
+            {
+                Color = colors[index],
+                IsAntialias = true,
+                Shader = SKShader.CreateRadialGradient(point, 25, new SKColor[] { colors[index], Background }, SKShaderTileMode.Mirror)
+            };
 
-            g.DrawCircle((float)pos.X, (float)pos.Y, 5f, paint);
+            g.DrawCircle(point, 25f, paint);
+
         }
 
         private void DrawTail(int index)

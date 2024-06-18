@@ -21,6 +21,7 @@ namespace GravitySimulator
 
             DT = deltaT;
 
+            _isDummyModel = isDummyModel;
             if (!isDummyModel)
             {
                 throw new NotImplementedException("Ooops!");
@@ -43,13 +44,22 @@ namespace GravitySimulator
 
         public void Advance()
         {
-            for (int i = 0; i < objects.Length; i++)
+            if (_isDummyModel)
             {
-                objects[i].Position = circles[i].NextPosition(DT);
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    objects[i].Position = circles[i].NextPosition(DT);
 
-                // Invert Y
-                ObjectsPos[i].X =  objects[i].Position.X;
-                ObjectsPos[i].Y = -objects[i].Position.Y;
+                    // Invert Y
+                    ObjectsPos[i].X = objects[i].Position.X;
+                    ObjectsPos[i].Y = -objects[i].Position.Y;
+                }
+            }
+            else
+            {
+                // Step 1 - Calc forces
+                // Step 2 - Calc velocity
+                // Step 3 - Calc positions
             }
         }
 
@@ -62,5 +72,8 @@ namespace GravitySimulator
         private PhyObject[] objects;
         private CircleTrack[] circles;
         private const int MaxObjects = 8;
+
+
+        private bool _isDummyModel;
     }
 }

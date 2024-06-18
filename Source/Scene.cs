@@ -5,14 +5,12 @@ using OpenTK;
 
 namespace GravitySimulator
 {
-    /* TO-DO
-     * - добавить инициализацию массива полутонов для кждого цвета
-     */
-
     public class Scene
     {
+
         private SKCanvas g;
         private static SKColor[] colors;
+        private Queue<SKPoint>[] trackArr;
 
         static Scene()
         {
@@ -34,7 +32,11 @@ namespace GravitySimulator
         public Scene(int numObjects)
         {
             ObjectsNum = numObjects;
-            Background = new SKColor(0, 0, 0, 0);
+            Background = new SKColor(0, 0, 0, 00);
+
+            trackArr = new Queue<SKPoint>[numObjects];
+            for (int i = 0; i < numObjects; i++)
+                trackArr[i] = new Queue<SKPoint>(TailsLength);
         }
 
         public float Scale { get; set; } = 1f;
@@ -81,11 +83,13 @@ namespace GravitySimulator
             {
                 Color = colors[index],
                 IsAntialias = true,
-                Shader = SKShader.CreateRadialGradient(point, 25, new SKColor[] { colors[index], Background }, SKShaderTileMode.Mirror)
+                Shader = SKShader.CreateRadialGradient(point, 20, new SKColor[] { colors[index], Background }, SKShaderTileMode.Mirror)
             };
 
-            g.DrawCircle(point, 25f, paint);
+            g.DrawCircle(point, 20f, paint);
 
+            paint.Shader = null;
+            g.DrawCircle(point, 5f, paint);
         }
 
         private void DrawTail(int index)

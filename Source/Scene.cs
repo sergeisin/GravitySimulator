@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OpenTK;
 using SkiaSharp;
-using OpenTK;
+using System.Collections.Generic;
+using System.Linq;
+//using System.Linq;
 
 namespace GravitySimulator
 {
@@ -10,11 +11,13 @@ namespace GravitySimulator
 
         private SKCanvas g;
         private static SKColor[] colors;
-        private Queue<SKPoint>[] trackArr;
+        private LinkedList<SKPoint>[] tracksArr;
 
         static Scene()
         {
             // "#FF0066CC" - HotTrack
+            SKColor color_1 = SKColor.Parse("#FF0066CC");
+            SKColor color_2 = SKColor.Parse("#FF11FF00");
 
             colors = new SKColor[8]
             {
@@ -34,13 +37,13 @@ namespace GravitySimulator
             ObjectsNum = numObjects;
             Background = new SKColor(0, 0, 0, 00);
 
-            trackArr = new Queue<SKPoint>[numObjects];
+            tracksArr = new LinkedList<SKPoint>[numObjects];
             for (int i = 0; i < numObjects; i++)
-                trackArr[i] = new Queue<SKPoint>(TailsLength);
+                tracksArr[i] = new LinkedList<SKPoint>();
         }
 
         public float Scale { get; set; } = 1f;
-        public int TailsLength { get; set; } = 1000;
+        public int TailsLength { get; set; } = 401;
         public int ObjectsNum  { get; }
 
         public SKColor Background { get; set; }
@@ -60,25 +63,37 @@ namespace GravitySimulator
             for (int i = 0; i < ObjectsNum; i++)
             {
                 DrawTail(i);
+            }
+
+            for (int i = 0; i < ObjectsNum; i++)
+            {
                 DrawBody(i);
             }
         }
 
         private void UpdatePositions(Vector2d[] currentPos)
         {
-            testPos = currentPos;
+            for (int i = 0; i < ObjectsNum; i++)
+            {
+                var point = new SKPoint()
+                {
+                    X = (float)currentPos[i].X,
+                    Y = (float)currentPos[i].Y
+                };
+
+                tracksArr[i].AddFirst(point);
+
+                if (tracksArr[i].Count > TailsLength)
+                {
+                    tracksArr[i].RemoveLast();
+                }
+            }
         }
 
         private void DrawBody(int index)
         {
-            Vector2d p_v2d = testPos[index];
-
-            SKPoint point = new SKPoint()
-            {
-                X = (float)p_v2d.X,
-                Y = (float)p_v2d.Y,
-            };
-
+            SKPoint point = tracksArr[index].First.Value;
+            
             var paint = new SKPaint
             {
                 Color = colors[index],
@@ -94,59 +109,23 @@ namespace GravitySimulator
 
         private void DrawTail(int index)
         {
-        
-        }
+            var track = tracksArr[index].ToArray();
 
+            colors[index].ToHsv(out float h, out float s, out float v);
+            float stepVal = v / (TailsLength - 1);
 
-
-        //
-        // Test
-        //
-        private Vector2d[] testPos;
-
-        public static void Test(SKCanvas g)
-        {
-            SKColor color_1 = SKColor.Parse("#FF0066CC");
-            SKColor color_2 = SKColor.Parse("#FF11FF00");
-
-            SKColor[] colors = { color_1, color_2 };
-
-            SKPoint p1 = new SKPoint(-0.5f * g.LocalClipBounds.Width, -0.5f * g.LocalClipBounds.Height);
-            SKPoint p2 = new SKPoint(+0.5f * g.LocalClipBounds.Width, +0.5f * g.LocalClipBounds.Height);
-
-            var paint = new SKPaint
+            for (int i = 0; i < track.Length - 1; i++)
             {
-                IsAntialias = true,
-                Shader = SKShader.CreateLinearGradient(p1, p2, colors, SKShaderTileMode.Clamp)
-            };
+                var paint = new SKPaint
+                {
+                    IsAntialias = true,
+                    Color = SKColor.FromHsl(h, s, v - stepVal * i),
+                    StrokeWidth = 1F,
+                    StrokeCap = SKStrokeCap.Round,
+                };
 
-            g.DrawCircle(1, 2, 20, paint);
-
-            SKPoint p3 = new SKPoint(20, 20);
-            SKPoint p4 = new SKPoint(500, 250);
-
-            var paint2 = new SKPaint
-            {
-                StrokeWidth = 5,
-                IsAntialias = true,
-                StrokeCap = SKStrokeCap.Round,
-                Shader = SKShader.CreateLinearGradient(p1, p2, colors, SKShaderTileMode.Clamp)
-            };
-
-            g.DrawLine(p1, p2, paint);
-
-            var paint3 = new SKPaint
-            {
-                Color = SKColor.Parse("#FF0066CC"),
-                IsAntialias = true
-            };
-
-            g.DrawCircle(0, 0, 2, paint);
-
-            g.DrawLine(-100, 0, 100, 0, paint);
-            g.DrawLine(0, -100, 0, 100, paint);
-
-            g.DrawCircle(new SKPoint((float)5, (float)1), 5, paint);
+                g.DrawLine(track[i], track[i + 1], paint);
+            }
         }
     }
 }

@@ -17,8 +17,8 @@ namespace GravitySimulator
                 SKColors.DeepSkyBlue,           // Синий
                 SKColors.PowderBlue,            // Свеило-синий
                 SKColors.NavajoWhite,           // Желтый
-                SKColors.Lavender,          
                 SKColors.MediumSpringGreen,     // Слишком зелёный
+                SKColors.Lavender,          
                 SKColors.BlueViolet,            // Так себе
                 SKColors.MediumPurple,          // Так себе
                 SKColors.Orange,                // Так себе
@@ -38,7 +38,7 @@ namespace GravitySimulator
         public int TailsLength { get; set; } = 401;
         public int ObjectsNum  { get; }
         public SKColor Background { get; set; }
-        public float Scale     { get; set; } = 1.5f;
+        public float Scale     { get; set; } = 2.0f;
         public float LineWidth { get; set; } = 1.5f;
         public float BallWidth { get; set; } = 5.0f;
 

@@ -6,13 +6,10 @@ namespace GravitySimulator
 {
     internal class Model
     {
-        public Model(PhyObject[] objects, double deltaT, bool isDummyModel = true)
+        public Model(PhyObject[] objects, double deltaT)
         {
-            if (objects != null)
-            {
-                this.objects = objects;
-                Count = objects.Length;
-            }
+            this.objects = objects;
+            Count = objects.Length;
 
             if (objects.Length > MaxObjects)
             {
@@ -20,20 +17,6 @@ namespace GravitySimulator
             }
 
             DT = deltaT;
-
-            _isDummyModel = isDummyModel;
-            if (!isDummyModel)
-            {
-                throw new NotImplementedException("Ooops!");
-            }
-            else
-            {
-                var lst = new List<CircleTrack>(objects.Length);
-                foreach (var obj in objects)
-                    lst.Add(new CircleTrack(obj.Position.Length, Geometry.Angle(obj.Position)));
-
-                circles = lst.ToArray();
-            }
 
             ObjectsPos = new Vector2d[Count];
             for (int i = 0; i < Count; i++)
@@ -46,23 +29,31 @@ namespace GravitySimulator
             }
         }
 
-        public void Advance()
+        public void Advance(int cycles)
         {
-            if (_isDummyModel)
+            // Some time cycles
+            for (int c = 0; c < cycles; c++)
             {
-                for (int i = 0; i < objects.Length; i++)
-                {
-                    objects[i].Position = circles[i].NextPosition(DT);
+                Vector2d[] forces = Physics.CalcForces(objects);
 
-                    ObjectsPos[i].X = objects[i].Position.X;
-                    ObjectsPos[i].Y = objects[i].Position.Y;
+                for (int i = 0; i < Count; i++)
+                {
+                    PhyObject obj = objects[i];
+                    Vector2d force = forces[i];
+
+                    obj.Velocity += force * DT;
+                    obj.Position += obj.Velocity * DT;
                 }
             }
-            else
+
+            // View positions update
+            for (int i = 0; i < Count; i++)
             {
-                // Step 1 - Calc forces
-                // Step 2 - Calc velocity
-                // Step 3 - Calc positions
+                ObjectsPos[i] = new Vector2d()
+                {
+                    X = objects[i].Position.X,
+                    Y = objects[i].Position.Y
+                };
             }
         }
 
@@ -73,10 +64,6 @@ namespace GravitySimulator
         public int Count { get; private set; }
 
         private PhyObject[] objects;
-        private CircleTrack[] circles;
         private const int MaxObjects = 8;
-
-
-        private bool _isDummyModel;
     }
 }

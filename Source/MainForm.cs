@@ -18,12 +18,12 @@ namespace GravitySimulator
 
             PhyObject[] objects =
             {
-                new PhyObject(1, new Vector2d(20, 20), new Vector2d()),
-                new PhyObject(1, new Vector2d(50, 50), new Vector2d()),
-                new PhyObject(1, new Vector2d(80, 80), new Vector2d()),
+                new PhyObject(1, new Vector2d(0, 0), new Vector2d()),
+                new PhyObject(1, new Vector2d(0, 40), new Vector2d()),
+                new PhyObject(1, new Vector2d(30, 0), new Vector2d()),
             };
 
-            model = new Model(objects, deltaT: 0.01);
+            model = new Model(objects, deltaT: 0.0001);
             scene = new Scene(objects.Length);
         }
 
@@ -37,7 +37,7 @@ namespace GravitySimulator
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
-            model.Advance();
+            model.Advance(10000);
             skglSurface.Invalidate();
             counterFPS.UpdateFPS();
         }

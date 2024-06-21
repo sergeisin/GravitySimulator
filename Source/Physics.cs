@@ -4,7 +4,8 @@ namespace GravitySimulator
 {
     public class Physics
     {
-        public const double G = 6.67430e-11;
+        //public const double G = 6.67430e-11;
+        public const double G = .5;
 
         public static Vector2d[] CalcForces(PhyObject[] objects)
         {

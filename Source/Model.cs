@@ -38,7 +38,11 @@ namespace GravitySimulator
             ObjectsPos = new Vector2d[Count];
             for (int i = 0; i < Count; i++)
             {
-                ObjectsPos[i] = new Vector2d();
+                ObjectsPos[i] = new Vector2d()
+                {
+                    X = objects[i].Position.X,
+                    Y = objects[i].Position.Y,
+                };
             }
         }
 
@@ -50,9 +54,8 @@ namespace GravitySimulator
                 {
                     objects[i].Position = circles[i].NextPosition(DT);
 
-                    // Invert Y
                     ObjectsPos[i].X = objects[i].Position.X;
-                    ObjectsPos[i].Y = -objects[i].Position.Y;
+                    ObjectsPos[i].Y = objects[i].Position.Y;
                 }
             }
             else

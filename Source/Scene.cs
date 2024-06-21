@@ -2,51 +2,45 @@
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Linq;
-//using System.Linq;
 
 namespace GravitySimulator
 {
     public class Scene
     {
-
         private SKCanvas g;
         private static SKColor[] colors;
         private LinkedList<SKPoint>[] tracksArr;
-
         static Scene()
         {
-            // "#FF0066CC" - HotTrack
-            SKColor color_1 = SKColor.Parse("#FF0066CC");
-            SKColor color_2 = SKColor.Parse("#FF11FF00");
-
-            colors = new SKColor[8]
+            colors = new SKColor[]
             {
-                SKColors.DeepSkyBlue,
-                SKColors.MediumPurple,
-                SKColors.NavajoWhite,
-                SKColors.Orange,
-                SKColors.MediumSpringGreen,
-                SKColors.PowderBlue,
-                SKColors.BlueViolet,
-                SKColors.Lavender
+                SKColors.DeepSkyBlue,           // Синий
+                SKColors.PowderBlue,            // Свеило-синий
+                SKColors.NavajoWhite,           // Желтый
+                SKColors.Lavender,          
+                SKColors.MediumSpringGreen,     // Слишком зелёный
+                SKColors.BlueViolet,            // Так себе
+                SKColors.MediumPurple,          // Так себе
+                SKColors.Orange,                // Так себе
             };
         }
 
         public Scene(int numObjects)
         {
             ObjectsNum = numObjects;
-            Background = new SKColor(0, 0, 0, 00);
+            Background = new SKColor(0, 0, 0, 0);
 
             tracksArr = new LinkedList<SKPoint>[numObjects];
             for (int i = 0; i < numObjects; i++)
                 tracksArr[i] = new LinkedList<SKPoint>();
         }
 
-        public float Scale { get; set; } = 1f;
         public int TailsLength { get; set; } = 401;
         public int ObjectsNum  { get; }
-
         public SKColor Background { get; set; }
+        public float Scale     { get; set; } = 1.5f;
+        public float LineWidth { get; set; } = 1.5f;
+        public float BallWidth { get; set; } = 5.0f;
 
         public void Render(SKCanvas canvas, Vector2d[] objPositions)
         {
@@ -77,8 +71,8 @@ namespace GravitySimulator
             {
                 var point = new SKPoint()
                 {
-                    X = (float)currentPos[i].X,
-                    Y = (float)currentPos[i].Y
+                    X = +(float)currentPos[i].X,
+                    Y = -(float)currentPos[i].Y
                 };
 
                 tracksArr[i].AddFirst(point);
@@ -93,18 +87,22 @@ namespace GravitySimulator
         private void DrawBody(int index)
         {
             SKPoint point = tracksArr[index].First.Value;
+
+            float bWidth = BallWidth / Scale;
+            float lWidth = bWidth * 4;
+
             
             var paint = new SKPaint
             {
                 Color = colors[index],
                 IsAntialias = true,
-                Shader = SKShader.CreateRadialGradient(point, 20, new SKColor[] { colors[index], Background }, SKShaderTileMode.Mirror)
+                Shader = SKShader.CreateRadialGradient(point, lWidth, new SKColor[] { colors[index], Background }, SKShaderTileMode.Mirror)
             };
 
-            g.DrawCircle(point, 20f, paint);
+            g.DrawCircle(point, lWidth, paint);
 
             paint.Shader = null;
-            g.DrawCircle(point, 5f, paint);
+            g.DrawCircle(point, bWidth, paint);
         }
 
         private void DrawTail(int index)
@@ -119,8 +117,8 @@ namespace GravitySimulator
                 var paint = new SKPaint
                 {
                     IsAntialias = true,
-                    Color = SKColor.FromHsl(h, s, v - stepVal * i),
-                    StrokeWidth = 1F,
+                    Color = SKColor.FromHsv(h, s, v - stepVal * i),
+                    StrokeWidth = LineWidth / Scale,
                     StrokeCap = SKStrokeCap.Round,
                 };
 

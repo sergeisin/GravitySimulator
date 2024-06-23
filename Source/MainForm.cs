@@ -18,9 +18,9 @@ namespace GravitySimulator
 
             PhyObject[] objects =
             {
-                new PhyObject(1, new Vector2d(0, 0), new Vector2d()),
-                new PhyObject(1, new Vector2d(0, 40), new Vector2d()),
-                new PhyObject(1, new Vector2d(30, 0), new Vector2d()),
+                new PhyObject(1, new Vector2d(-20, -20), new Vector2d()),
+                new PhyObject(1, new Vector2d(-20, 20), new Vector2d()),
+                new PhyObject(1, new Vector2d(10, -20), new Vector2d()),
             };
 
             model = new Model(objects, deltaT: 0.0001);

@@ -103,7 +103,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\CircleTrack.cs" />
     <Compile Include="Source\CounterFPS.cs" />
     <Compile Include="Source\Geometry.cs" />
     <Compile Include="Source\Physics.cs" />

@@ -7,11 +7,13 @@ namespace GravitySimulator
 {
     public class Scene
     {
-        private SKCanvas g;
+        private static SKCanvas g;
         private static SKColor[] colors;
         private LinkedList<SKPoint>[] tracksArr;
         static Scene()
         {
+            Background = new SKColor(0, 0, 0, 0);
+
             colors = new SKColor[]
             {
                 SKColors.DeepSkyBlue,           // Синий
@@ -28,45 +30,37 @@ namespace GravitySimulator
         public Scene(int numObjects)
         {
             ObjectsNum = numObjects;
-            Background = new SKColor(0, 0, 0, 0);
-
             tracksArr = new LinkedList<SKPoint>[numObjects];
             for (int i = 0; i < numObjects; i++)
                 tracksArr[i] = new LinkedList<SKPoint>();
         }
 
-        public int TailsLength { get; set; } = 401;
-        public int ObjectsNum  { get; }
-        public SKColor Background { get; set; }
-        public float Scale     { get; set; } = 2.0f;
-        public float LineWidth { get; set; } = 1.5f;
-        public float BallWidth { get; set; } = 5.0f;
+        public int TailsLength    { get; set; } = 401;
+        public int ObjectsNum     { get; }
+        public static SKColor Background { get; set; }
+        public static float Scale { get; set; } = 2.0f;
+        public float LineWidth    { get; set; } = 1.5f;
+        public float BallWidth    { get; set; } = 5.0f;
 
-        public void Render(SKCanvas canvas, Vector2d[] objPositions, bool init = false)
+
+        public static void InitFrame(SKCanvas canvas)
         {
             g = canvas;
 
-            if (init)
-            {
-                g.Clear(Background);
+            g.Clear(Background);
 
-                g.Translate(0.5f * g.LocalClipBounds.Width,
-                            0.5f * g.LocalClipBounds.Height);
+            g.Translate(0.5f * g.LocalClipBounds.Width,
+            0.5f * g.LocalClipBounds.Height);
 
-                g.Scale(Scale);
-            }
+            g.Scale(Scale);
+        }
 
+        public void Render(Vector2d[] objPositions)
+        {
             UpdatePositions(objPositions);
 
-            for (int i = 0; i < ObjectsNum; i++)
-            {
-                DrawTail(i);
-            }
-
-            for (int i = 0; i < ObjectsNum; i++)
-            {
-                DrawBody(i);
-            }
+            for (int i = 0; i < ObjectsNum; i++) DrawTail(i);
+            for (int i = 0; i < ObjectsNum; i++) DrawBody(i);
         }
 
         private void UpdatePositions(Vector2d[] currentPos)
@@ -82,9 +76,7 @@ namespace GravitySimulator
                 tracksArr[i].AddFirst(point);
 
                 if (tracksArr[i].Count > TailsLength)
-                {
                     tracksArr[i].RemoveLast();
-                }
             }
         }
 

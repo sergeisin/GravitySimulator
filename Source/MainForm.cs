@@ -40,15 +40,9 @@ namespace GravitySimulator
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0)
-            {
-                scene_1.Scale *= 1.15f;
-                scene_2.Scale *= 1.15f;
-            }
+                Scene.Scale *= 1.15f;
             else
-            {
-                scene_1.Scale /= 1.15f;
-                scene_2.Scale /= 1.15f;
-            }
+                Scene.Scale /= 1.15f;
         }
 
         private void FrameTimer_Tick(object sender, EventArgs e)
@@ -61,25 +55,27 @@ namespace GravitySimulator
 
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
-            scene_1.Render(e.Surface.Canvas, model_1.ObjectsPos, true);
-            scene_2.Render(e.Surface.Canvas, model_2.ObjectsPos, false);
+            Scene.InitFrame(e.Surface.Canvas);
+
+            scene_1.Render(model_1.ObjectsPos);
+            scene_2.Render(model_2.ObjectsPos);
         }
 
         private void SkglSurface_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Add || e.KeyCode == Keys.Oemplus)
             {
-                scene_1.Scale *= 1.15f;
+                Scene.Scale *= 1.15f;
             }
 
             if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.OemMinus)
             {
-                scene_1.Scale /= 1.15f;
+                Scene.Scale /= 1.15f;
             }
 
             if (e.KeyCode == Keys.Enter)
             {
-                scene_1.Scale = 1f;
+                Scene.Scale = 1f;
             }
         }
 
@@ -89,8 +85,8 @@ namespace GravitySimulator
 
             clickPosition = new SKPoint()
             {
-                X = (a.X - 0.5f * skglSurface.Width)  / scene_1.Scale,
-                Y = (a.Y - 0.5f * skglSurface.Height) / scene_1.Scale
+                X = (a.X - 0.5f * skglSurface.Width)  / Scene.Scale,
+                Y = (a.Y - 0.5f * skglSurface.Height) / Scene.Scale
             };
         }
 

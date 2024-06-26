@@ -42,15 +42,19 @@ namespace GravitySimulator
         public float LineWidth { get; set; } = 1.5f;
         public float BallWidth { get; set; } = 5.0f;
 
-        public void Render(SKCanvas canvas, Vector2d[] objPositions)
+        public void Render(SKCanvas canvas, Vector2d[] objPositions, bool init = false)
         {
             g = canvas;
-            g.Clear(Background);
 
-            g.Translate(0.5f * g.LocalClipBounds.Width,
-                        0.5f * g.LocalClipBounds.Height);
+            if (init)
+            {
+                g.Clear(Background);
 
-            g.Scale(Scale);
+                g.Translate(0.5f * g.LocalClipBounds.Width,
+                            0.5f * g.LocalClipBounds.Height);
+
+                g.Scale(Scale);
+            }
 
             UpdatePositions(objPositions);
 

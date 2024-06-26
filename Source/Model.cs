@@ -39,10 +39,11 @@ namespace GravitySimulator
                 for (int i = 0; i < Count; i++)
                 {
                     PhyObject obj = objects[i];
-                    Vector2d force = forces[i];
 
-                    obj.Velocity += force * DT;
-                    obj.Position += obj.Velocity * DT;
+                    Vector2d newPosition = 2.0 * obj.Position - obj.PrevPosition + forces[i] * DT * DT;
+
+                    obj.PrevPosition = obj.Position;
+                    obj.Position = newPosition;
                 }
             }
 

@@ -44,7 +44,7 @@ namespace GravitySimulator
 
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
-            Scene.Init(e.Surface.Canvas);
+            Scene.InitFrame(e.Surface.Canvas);
             scene.Render(model.ObjectsPos);
         }
 

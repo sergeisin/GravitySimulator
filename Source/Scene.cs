@@ -12,7 +12,7 @@ namespace GravitySimulator
         private LinkedList<SKPoint>[] tracksArr;
         static Scene()
         {
-            Background = new SKColor(0, 0, 0, 0);
+            Background = new SKColor();
 
             colors = new SKColor[]
             {
@@ -43,7 +43,7 @@ namespace GravitySimulator
         public float BallWidth    { get; set; } = 5.0f;
 
 
-        public static void InitFrame(SKCanvas canvas)
+        public static void Init(SKCanvas canvas)
         {
             g = canvas;
 

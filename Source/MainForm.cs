@@ -16,25 +16,15 @@ namespace GravitySimulator
 
             counterFPS = new CounterFPS(this);
 
-            PhyObject[] objects_1 =
+            PhyObject[] objects =
             {
                 new PhyObject(1, new Vector2d(-20, -20)),
                 new PhyObject(1, new Vector2d(-20, 20)),
                 new PhyObject(1, new Vector2d(10, -20)),
             };
 
-            PhyObject[] objects_2 =
-{
-                new PhyObject(1, new Vector2d(-20, -20)),
-                new PhyObject(1, new Vector2d(-20, 20)),
-                new PhyObject(1, new Vector2d(10, -20)),
-            };
-
-            model_1 = new Model(objects_1, deltaT: 0.001);
-            model_2 = new Model(objects_2, deltaT: 0.002);
-
-            scene_1 = new Scene(objects_1.Length);
-            scene_2 = new Scene(objects_2.Length);
+            model = new Model(objects, deltaT: 0.001, cycles: 1000);
+            scene = new Scene(objects.Length);
         }
 
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)
@@ -47,18 +37,15 @@ namespace GravitySimulator
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
-            model_1.Advance((int)(1.0 / model_1.DT));
-            model_2.Advance((int)(1.0 / model_2.DT));
+            model.Advance();
             skglSurface.Invalidate();
             counterFPS.UpdateFPS();
         }
 
         private void SkglSurface_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
-            Scene.InitFrame(e.Surface.Canvas);
-
-            scene_1.Render(model_1.ObjectsPos);
-            scene_2.Render(model_2.ObjectsPos);
+            Scene.Init(e.Surface.Canvas);
+            scene.Render(model.ObjectsPos);
         }
 
         private void SkglSurface_KeyDown(object sender, KeyEventArgs e)
@@ -92,11 +79,8 @@ namespace GravitySimulator
 
         private CounterFPS counterFPS;
 
-        private Model model_1;            // Physics model
-        private Scene scene_1;            // Graphic scene
-
-        private Scene scene_2;
-        private Model model_2;
+        private Model model;            // Physics model
+        private Scene scene;            // Graphic scene
 
         private SKPoint clickPosition;  // Last mouse click position (model)
     }

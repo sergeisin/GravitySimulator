@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using OpenTK;
 
 namespace GravitySimulator
 {
     internal class Model
     {
-        public Model(PhyObject[] objects, double deltaT)
+        public Model(PhyObject[] objects, double deltaT, int cycles)
         {
             this.objects = objects;
             Count = objects.Length;
@@ -15,6 +14,13 @@ namespace GravitySimulator
             {
                 throw new ArgumentException("Too many objects");
             }
+
+            if (cycles < 1)
+            {
+                throw new ArgumentException("cycles < 1");
+            }
+
+            numCycles = cycles;
 
             DT = deltaT;
 
@@ -29,10 +35,10 @@ namespace GravitySimulator
             }
         }
 
-        public void Advance(int cycles)
+        public void Advance()
         {
             // Some time cycles
-            for (int c = 0; c < cycles; c++)
+            for (int c = 0; c < numCycles; c++)
             {
                 Vector2d[] forces = Physics.CalcForces(objects);
 
@@ -64,6 +70,8 @@ namespace GravitySimulator
 
         public int Count { get; private set; }
 
+
+        private int numCycles;
         private PhyObject[] objects;
         private const int MaxObjects = 8;
     }

@@ -9,11 +9,10 @@ namespace GravitySimulator
         private static SKCanvas g;
         private static SKColor[] colors;
 
-        // Colors HSV arrays + temp
+        // Colors HSV arrays
         private static float[] h_Arr;
         private static float[] s_Arr;
         private static float[] v_Arr;
-        private static float[] t_Arr;
 
         // Archive of previous states
         private LinkedList<SKPoint[]> stateStore;
@@ -37,7 +36,6 @@ namespace GravitySimulator
             h_Arr = new float[colors.Length];
             s_Arr = new float[colors.Length];
             v_Arr = new float[colors.Length];
-            t_Arr = new float[colors.Length];
 
             for (int i = 0; i < colors.Length; i++)
             {
@@ -51,10 +49,10 @@ namespace GravitySimulator
             stateStore = new LinkedList<SKPoint[]>();
         }
 
-        public int TailsLength    { get; set; } = 401;
+        public int TailsLength  { get; set; } = 300;
         public int ObjCount     { get; }
         public static SKColor Background { get; set; }
-        public static float Scale { get; set; } = 2.0f;
+        public static float Scale { get; set; } = 4.0f;
         public float LineWidth    { get; set; } = 1.5f;
         public float BallWidth    { get; set; } = 5.0f;
 
@@ -101,53 +99,51 @@ namespace GravitySimulator
             SKPoint[] points = stateStore.First.Value;
 
             float bodyWidth = BallWidth / Scale;
-            float galoWidth = bodyWidth * 5;
+            float galoWidth = bodyWidth * 4;
 
             for (int i = 0; i < ObjCount; i++)
             {
-                SKPoint c = points[i];
-                SKPaint p = new SKPaint
+                SKColor color = colors[i];
+                SKPoint point = points[i];
+                SKPaint paint = new SKPaint
                 {
                     IsAntialias = true,
-                    Color = colors[i],
-                    Shader = SKShader.CreateRadialGradient(c, galoWidth, new SKColor[] { colors[i], Background }, SKShaderTileMode.Mirror)
+                    Color = color,
+                    Shader = SKShader.CreateRadialGradient(point, galoWidth, new SKColor[] { color, Background }, SKShaderTileMode.Mirror)
                 };
 
-                g.DrawCircle(c, galoWidth, p);
-                p.Shader = null;
-                g.DrawCircle(c, bodyWidth, p);
+                g.DrawCircle(point, galoWidth, paint);
+                paint.Shader = null;
+                g.DrawCircle(point, bodyWidth, paint);
             }
         }
 
         private void DrawTails()
         {
-            v_Arr.CopyTo(t_Arr, 0);
+            var paint = new SKPaint
+            {
+                IsAntialias = true,
+                StrokeWidth = LineWidth / Scale,
+                StrokeCap = SKStrokeCap.Round,
+            };
 
-            /*
-               Внешний цикл    - итерация по состояниям от самого старого к самому новому
-               Внутренний цикл - итерация по объектам i = 0 .. ObjectsNum
+            int step = 0;
 
-               SKColor t = colors[i]; - получение цвета i-го объекта
+            var node = stateStore.Last;
+            while (node != stateStore.First)
+            {
+                SKPoint[] state_A = node.Value;
+                SKPoint[] state_B = node.Previous.Value;
 
-               float h   = h_Arr[i];  - получение H цвета i-го объекта
-               float s   = s_Arr[i];  - получение S цвета i-го объекта
-               float v   = v_Arr[i];  - получение V цвета i-го объекта
-             */
+                for (int i = 0; i < ObjCount; i++)
+                {
+                    paint.Color = SKColor.FromHsv(h_Arr[i], s_Arr[i], step * v_Arr[i] / TailsLength);
+                    g.DrawLine(state_A[i], state_B[i], paint);
+                }
 
-            //LinkedListNode<SKPoint[]> node = stateStore.Last;
-            //colors[index].ToHsv(out float h, out float s, out float v);
-            //float stepVal = v / (TailsLength - 1);
-            //for (int i = 0; i < track.Length - 1; i++)
-            //{
-            //    var paint = new SKPaint
-            //    {
-            //        IsAntialias = true,
-            //        Color = SKColor.FromHsv(h, s, v - stepVal * i),
-            //        StrokeWidth = LineWidth / Scale,
-            //        StrokeCap = SKStrokeCap.Round,
-            //    };
-            //    g.DrawLine(track[i], track[i + 1], paint);
-            //}
+                step++;
+                node = node.Previous;
+            }
         }
     }
 }

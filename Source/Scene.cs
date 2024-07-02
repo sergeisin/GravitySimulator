@@ -63,7 +63,7 @@ namespace GravitySimulator
             g.Clear(Background);
 
             g.Translate(0.5f * g.LocalClipBounds.Width,
-            0.5f * g.LocalClipBounds.Height);
+                        0.5f * g.LocalClipBounds.Height);
 
             g.Scale(Scale);
         }
@@ -76,6 +76,10 @@ namespace GravitySimulator
                 DrawTails();
 
             DrawCircles();
+
+            DrawText("Obj_1", 0);
+            DrawText(string.Format("X = {0,7:f2}", stateStore.First.Value[0].X), 1);
+            DrawText(string.Format("Y = {0,7:f2}", -stateStore.First.Value[0].Y), 2);
         }
 
         private void UpdatePositions(Vector2d[] currentPos)
@@ -143,6 +147,27 @@ namespace GravitySimulator
 
                 step++;
                 node = node.Previous;
+            }
+        }
+
+        private void DrawText(string text, int lineIndex)
+        {
+            float textSize = 17f;
+            float anchor_X = 25f;
+            float anchor_Y = 50f;
+            float gap = 4f;
+
+            using (var paint = new SKPaint())
+            {
+                paint.TextSize = textSize;
+                paint.IsAntialias = true;
+                paint.Color = SKColors.Silver;
+                paint.Typeface = SKTypeface.FromFamilyName("Consolas", SKFontStyle.Normal);
+
+                float offset = paint.TextSize * 2;
+
+                g.Restore();
+                g.DrawText(text, anchor_X, anchor_Y + (lineIndex * (textSize + gap)), paint);
             }
         }
     }
